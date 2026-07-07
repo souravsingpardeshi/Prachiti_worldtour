@@ -56,6 +56,18 @@ export function renderAdmin(itinerary, achievementsData) {
 
   const progress = Storage.getProgress();
 
+  // Build these strings BEFORE the template literal to avoid nested backtick issues
+  const currentDest = itinerary.dates.find(d => d.id === progress.currentId);
+  const currentDestLabel = currentDest ? currentDest.flag + ' ' + escapeHtml(currentDest.city) : 'None set';
+
+  let selectOptions = '';
+  itinerary.dates.forEach(d => {
+    const isSelected = progress.currentId === d.id;
+    selectOptions += '<option value="' + d.id + '"' + (isSelected ? ' selected' : '') + '>'
+      + (isSelected ? '📍 ' : '') + d.flag + ' ' + escapeHtml(d.city) + ' — ' + escapeHtml(d.theme)
+      + '</option>';
+  });
+
   let tableRows = itinerary.dates.map(date => {
     const isCompleted = progress.completedIds.includes(date.id);
     const isCurrent   = progress.currentId === date.id;
@@ -120,13 +132,10 @@ export function renderAdmin(itinerary, achievementsData) {
       <div class="glass-panel" style="padding:1.5rem; margin-bottom:1.5rem;">
         <h3 style="margin-bottom:0.5rem; font-size:1rem; color:rgba(255,255,255,0.7); font-weight:600; letter-spacing:1px; text-transform:uppercase;">Current Destination</h3>
         <p style="color:#aaa; font-size:0.8rem; margin-bottom:1rem;">Choose the active destination — the boarding pass and map will update instantly.</p>
-        <select id="quick-current-select" style="width:100%; background:rgba(255,255,255,0.1); color:white; border:1px solid rgba(255,255,255,0.25); border-radius:10px; padding:12px 16px; font-size:1rem; font-family:var(--font-ui); outline:none; cursor:pointer; appearance:auto;">
-          ${itinerary.dates.map(d => {
-            const isSelected = progress.currentId === d.id;
-            return `<option value="${d.id}" ${isSelected ? 'selected' : ''} style="background:#1a2540; color:white;">${isSelected ? '📍 ' : ''}${d.flag} ${escapeHtml(d.city)} — ${escapeHtml(d.theme)}</option>`;
-          }).join('')}
+        <select id="quick-current-select" style="width:100%; background:rgba(255,255,255,0.1); color:white; border:1px solid rgba(255,255,255,0.25); border-radius:10px; padding:12px 16px; font-size:1rem; font-family:var(--font-ui); outline:none; cursor:pointer;">
+          ${selectOptions}
         </select>
-        <p id="quick-set-status" style="margin-top:8px; font-size:0.8rem; color:var(--accent);">Currently: ${(() => { const d = itinerary.dates.find(x => x.id === progress.currentId); return d ? d.flag + ' ' + escapeHtml(d.city) : 'None'; })()}</p>
+        <p id="quick-set-status" style="margin-top:8px; font-size:0.8rem; color:var(--accent);">Currently: ${currentDestLabel}</p>
       </div>
 
       <!-- Itinerary table -->
