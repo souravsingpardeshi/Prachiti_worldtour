@@ -1,0 +1,16 @@
+{
+  "badges": [
+    { "id": "coffee", "title": "Coffee Lover", "desc": "Complete a coffee date", "unlock": "Brazil", "icon": "coffee-cup" },
+    { "id": "pasta", "title": "Pasta Queen", "desc": "Complete an Italian dinner date", "unlock": "Italy", "icon": "pasta" },
+    { "id": "dance", "title": "Dance Master", "desc": "Complete a flamenco/dance night", "unlock": "Spain", "icon": "flamenco" },
+    { "id": "sunset", "title": "Sunset Chaser", "desc": "Watch a sunset together", "unlock": "Greece", "icon": "sunset" },
+    { "id": "spa", "title": "Spa Day", "desc": "Complete a spa date", "unlock": "Thailand", "icon": "lotus" },
+    { "id": "movie", "title": "Movie Buff", "desc": "Complete a movie night", "unlock": "India", "icon": "bollywood" },
+    { "id": "food", "title": "Food Explorer", "desc": "Complete 5 food dates", "target": 5, "type": "food", "icon": "food" },
+    { "id": "memory", "title": "Memory Keeper", "desc": "Upload 5 memories", "target": 5, "type": "memory", "icon": "camera" },
+    { "id": "traveler", "title": "World Traveler", "desc": "Visit 10 destinations", "target": 10, "type": "travel", "icon": "plane" },
+    { "id": "moon", "title": "Moon Chaser", "desc": "Reach the Final Destination", "unlock": "Moon", "icon": "moon" },
+    { "id": "explorer", "title": "Love Explorer", "desc": "Complete all destinations", "target": 20, "type": "travel", "icon": "compass" },
+    { "id": "passport", "title": "Passport Complete", "desc": "Collect all 20 stamps", "target": 20, "type": "stamp", "icon": "stamp" }
+  ]
+}
