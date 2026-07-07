@@ -62,7 +62,7 @@ export function renderLanding(itinerary) {
   });
   
   // Setup countdown to July 25, 2026
-  const targetDate = new Date('July 25, 2026 00:00:00').getTime();
+  const targetDate = new Date('July 11, 2026 00:00:00').getTime();
   
   const updateCountdown = () => {
     const now = new Date().getTime();

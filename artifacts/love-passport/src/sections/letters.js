@@ -4,91 +4,126 @@ export function renderLetters() {
   const container = document.getElementById('section-love-letter');
   const progress = Storage.getProgress();
   const completedCount = progress.completedIds.length;
-  
+
   const letters = [
     {
-      id: 1, req: 0, title: "The Beginning",
-      content: `Dear Parchiti,\n\nIf the whole world were a map and our love a journey,\nI would explore every corner just to find my way back to you.\nThis passport is not just a collection of dates —\nit's a promise that with every sunrise, there's a new adventure,\nand with every adventure, there's only you beside me.\n\nHappy birthday, my forever travel buddy.\n\nWith all my love, always,\nSourav ❤️`
+      id: 1, req: 0, title: "The Beginning", emoji: "💌",
+      content: `Dear Parchiti,
+
+If the whole world were a map and our love a journey, I would explore every corner just to find my way back to you.
+
+This passport is not just a collection of dates — it's a promise that with every sunrise, there's a new adventure, and with every adventure, there's only you beside me.
+
+Happy birthday, my forever travel buddy.
+
+With all my love, always,
+Sourav ❤️`
     },
     {
-      id: 2, req: 10, title: "Halfway There",
-      content: `My dearest Parchiti,\n\nSomewhere between coffee dates and stolen smiles,\nbetween late nights and lazy mornings,\nI found my favourite place in the world:\nanywhere that you are.\n\nTen destinations down. Forever more to go.\n\nYours, always,\nSourav`
+      id: 2, req: 10, title: "Halfway There", emoji: "✈️",
+      content: `My dearest Parchiti,
+
+Somewhere between coffee dates and stolen smiles, between late nights and lazy mornings, I found my favourite place in the world: anywhere that you are.
+
+Ten destinations down. Forever more to go.
+
+Yours, always,
+Sourav`
     },
     {
-      id: 3, req: 20, title: "The Real Journey",
-      content: `My love,\n\nWe've circled the world —\nthrough pasta nights and flower gardens,\nthrough laughter and moonlight,\nand every single moment has been my favourite memory.\n\nThank you for being my greatest adventure.\nThis is not the end of the journey.\nThis is where the real one begins.\n\nI love you more than every star in every sky of every country we've visited.\n\nForever yours,\nSourav ❤️`
+      id: 3, req: 20, title: "The Real Journey", emoji: "🌕",
+      content: `My love,
+
+We've circled the world — through pasta nights and flower gardens, through laughter and moonlight, and every single moment has been my favourite memory.
+
+Thank you for being my greatest adventure. This is not the end of the journey. This is where the real one begins.
+
+I love you more than every star in every sky of every country we've visited.
+
+Forever yours,
+Sourav ❤️`
     }
   ];
-  
-  let lettersHtml = '';
-  
-  letters.forEach((l, index) => {
+
+  let lettersHtml = letters.map((l) => {
     const isUnlocked = completedCount >= l.req;
-    
-    lettersHtml += `
-      <div class="envelope-wrapper ${isUnlocked ? '' : 'locked'}" style="margin-bottom:4rem; position:relative; width:100%; max-width:600px; margin-left:auto; margin-right:auto; perspective:1000px;">
-        <div style="text-align:center; margin-bottom:10px;">
-          <h3 style="color:${isUnlocked ? 'var(--primary)' : '#666'}; font-family:var(--font-romantic); font-size:2rem;">${l.title}</h3>
-          ${!isUnlocked ? `<p style="font-size:0.8rem; color:#888;">Unlocks after ${l.req} stamps (Current: ${completedCount})</p>` : ''}
+
+    if (!isUnlocked) {
+      return `
+        <div class="letter-card locked-letter">
+          <div class="letter-lock-icon">${l.emoji}</div>
+          <h3 class="letter-title locked-title">${l.title}</h3>
+          <p class="letter-unlock-hint">Unlocks after ${l.req} stamps completed<br><span style="color:var(--secondary);">(${completedCount}/${l.req} done)</span></p>
+          <div class="letter-seal-bar"></div>
         </div>
-        
-        <div class="envelope-body" style="position:relative; width:100%; height:300px; background:#d4c4b7; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.3); transform-style:preserve-3d; transition:transform 0.5s; cursor:${isUnlocked ? 'pointer' : 'default'}; overflow:hidden;">
-          <!-- Flap -->
-          <div class="flap" style="position:absolute; top:0; left:0; width:100%; height:60%; background:#e3d5ca; clip-path:polygon(0 0, 100% 0, 50% 100%); z-index:10; transform-origin:top; transition:transform 0.8s ease-in-out;"></div>
-          
-          <!-- Wax Seal -->
-          <div class="seal" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:50px; height:50px; background:#8a1c1c; border-radius:50%; z-index:11; box-shadow:inset 0 0 10px rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; color:#d4af37; font-family:serif; font-size:1.5rem; font-weight:bold; transition:opacity 0.3s; opacity:${isUnlocked ? '1' : '0.5'};">S</div>
-          
-          <!-- Letter paper hidden inside -->
-          <div class="letter-paper" style="position:absolute; top:10px; left:5%; width:90%; height:95%; background:#fdfbf7; padding:2rem; box-sizing:border-box; color:#333; font-family:var(--font-romantic); font-size:1.4rem; line-height:1.6; z-index:5; transform:translateY(0); transition:all 1s ease-in-out; border:1px solid #eee;">
-            <div style="white-space:pre-wrap;">${l.content}</div>
+      `;
+    }
+
+    return `
+      <div class="letter-card unlocked-letter" data-letter-id="${l.id}">
+        <!-- Envelope face -->
+        <div class="letter-envelope-face" id="envelope-face-${l.id}">
+          <div class="envelope-wax-seal">${l.emoji}</div>
+          <div class="envelope-meta">
+            <h3 class="letter-title">${l.title}</h3>
+            <p style="color:rgba(255,255,255,0.6); font-size:0.85rem; margin-top:4px;">Tap to open ↓</p>
           </div>
-          
-          <!-- Envelope front overlay -->
-          <div style="position:absolute; bottom:0; left:0; width:100%; height:100%; background:#d4c4b7; clip-path:polygon(0 100%, 50% 40%, 100% 100%); z-index:8;"></div>
+        </div>
+
+        <!-- Letter content (hidden until opened) -->
+        <div class="letter-content-panel" id="letter-content-${l.id}" style="display:none;">
+          <div class="letter-paper-sheet">
+            <div class="letter-paper-header">
+              <span style="font-family:var(--font-romantic); font-size:1.6rem; color:var(--primary);">${l.title}</span>
+              <span style="float:right; font-size:1.4rem;">${l.emoji}</span>
+            </div>
+            <div class="letter-body-text">${l.content.replace(/\n/g, '<br>')}</div>
+            <div class="letter-paper-footer">
+              <div style="border-top:1px solid #e0d5c5; padding-top:12px; font-family:var(--font-romantic); font-size:1.2rem; color:var(--primary);">With love ❤️</div>
+            </div>
+          </div>
+          <button class="letter-close-btn" id="close-letter-${l.id}">✕ Close Letter</button>
         </div>
       </div>
     `;
-  });
+  }).join('');
 
   container.innerHTML = `
-    <div style="padding:2rem;">
+    <div style="padding: 2rem; max-width: 720px; margin: 0 auto;">
       <div style="text-align:center; margin-bottom:3rem;">
-        <h2 style="font-size:2.5rem; font-family:var(--font-ui); color:var(--light); letter-spacing:4px; font-weight:300;">LETTERS</h2>
-        <p style="color:var(--secondary); font-family:var(--font-romantic); font-size:1.5rem;">Words left unspoken...</p>
+        <h2 style="font-size:2.2rem; font-family:var(--font-ui); color:var(--light); letter-spacing:4px; font-weight:300;">LOVE LETTERS</h2>
+        <p style="color:var(--secondary); font-family:var(--font-romantic); font-size:1.4rem;">Words written from the heart...</p>
+        ${completedCount < 10 ? `<p style="color:rgba(255,255,255,0.4); font-size:0.8rem; margin-top:8px;">Complete more dates to unlock all letters (${completedCount}/10 done for next)</p>` : ''}
       </div>
-      
-      ${lettersHtml}
+
+      <div style="display:flex; flex-direction:column; gap:2.5rem;">
+        ${lettersHtml}
+      </div>
     </div>
   `;
-  
-  // Animation logic
-  container.querySelectorAll('.envelope-wrapper').forEach(wrapper => {
-    if(wrapper.classList.contains('locked')) return;
-    
-    wrapper.querySelector('.envelope-body').addEventListener('click', function() {
-      const flap = this.querySelector('.flap');
-      const seal = this.querySelector('.seal');
-      const letter = this.querySelector('.letter-paper');
-      
-      if(flap.style.transform === 'rotateX(180deg)') {
-        // close
-        letter.style.transform = 'translateY(0) scale(1)';
-        letter.style.zIndex = '5';
-        setTimeout(() => {
-          flap.style.transform = 'rotateX(0deg)';
-          seal.style.opacity = '1';
-        }, 500);
-      } else {
-        // open
-        seal.style.opacity = '0';
-        flap.style.transform = 'rotateX(180deg)';
-        setTimeout(() => {
-          letter.style.zIndex = '20';
-          letter.style.transform = 'translateY(-150px) scale(1.1)';
-          letter.style.boxShadow = '0 20px 50px rgba(0,0,0,0.5)';
-        }, 800);
-      }
-    });
+
+  // Attach open/close events
+  letters.forEach(l => {
+    if (completedCount < l.req) return;
+
+    const face    = document.getElementById(`envelope-face-${l.id}`);
+    const content = document.getElementById(`letter-content-${l.id}`);
+    const closeBtn= document.getElementById(`close-letter-${l.id}`);
+
+    if (face && content) {
+      face.addEventListener('click', () => {
+        face.style.display = 'none';
+        content.style.display = 'block';
+        content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    if (closeBtn && content && face) {
+      closeBtn.addEventListener('click', () => {
+        content.style.display = 'none';
+        face.style.display = 'flex';
+        face.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
   });
 }
