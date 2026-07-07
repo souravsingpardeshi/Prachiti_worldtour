@@ -1,5 +1,5 @@
 /* Landing Section */
-#section-landing {
+#section-landing.active {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,6 +91,7 @@
   height: 100px;
   top: 30%;
   animation: plane-fly 15s linear infinite;
+  pointer-events: none;
 }
 
 .departure-board {
@@ -736,7 +737,7 @@ th {
 }
 
 /* Final */
-#section-final {
+#section-final.active {
   background: #000;
   color: white;
   display: flex;
