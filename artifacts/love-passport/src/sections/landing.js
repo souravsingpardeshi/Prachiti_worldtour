@@ -61,7 +61,7 @@ export function renderLanding(itinerary) {
     if (starsLayer) createStars(starsLayer, 100);
   });
   
-  // Setup countdown to July 25, 2026
+  // Setup countdown to July 11, 2026 (Parchiti's birthday)
   const targetDate = new Date('July 11, 2026 00:00:00').getTime();
   
   const updateCountdown = () => {
