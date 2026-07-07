@@ -118,13 +118,15 @@ export function renderAdmin(itinerary, achievementsData) {
 
       <!-- Quick controls -->
       <div class="glass-panel" style="padding:1.5rem; margin-bottom:1.5rem;">
-        <h3 style="margin-bottom:1rem; font-size:1rem; color:rgba(255,255,255,0.7); font-weight:600; letter-spacing:1px; text-transform:uppercase;">Quick Set Current Destination</h3>
-        <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap;">
-          <select id="quick-current-select" style="flex:1; min-width:200px; background:rgba(255,255,255,0.08); color:white; border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:10px 14px; font-size:0.95rem; font-family:var(--font-ui); outline:none;">
-            ${itinerary.dates.map(d => `<option value="${d.id}" ${progress.currentId === d.id ? 'selected' : ''}>${d.flag} ${escapeHtml(d.city)} (${d.theme})</option>`).join('')}
-          </select>
-          <button id="quick-set-btn" class="btn-primary" style="padding:10px 20px; white-space:nowrap;">📍 Set as Current</button>
-        </div>
+        <h3 style="margin-bottom:0.5rem; font-size:1rem; color:rgba(255,255,255,0.7); font-weight:600; letter-spacing:1px; text-transform:uppercase;">Current Destination</h3>
+        <p style="color:#aaa; font-size:0.8rem; margin-bottom:1rem;">Choose the active destination — the boarding pass and map will update instantly.</p>
+        <select id="quick-current-select" style="width:100%; background:rgba(255,255,255,0.1); color:white; border:1px solid rgba(255,255,255,0.25); border-radius:10px; padding:12px 16px; font-size:1rem; font-family:var(--font-ui); outline:none; cursor:pointer; appearance:auto;">
+          ${itinerary.dates.map(d => {
+            const isSelected = progress.currentId === d.id;
+            return `<option value="${d.id}" ${isSelected ? 'selected' : ''} style="background:#1a2540; color:white;">${isSelected ? '📍 ' : ''}${d.flag} ${escapeHtml(d.city)} — ${escapeHtml(d.theme)}</option>`;
+          }).join('')}
+        </select>
+        <p id="quick-set-status" style="margin-top:8px; font-size:0.8rem; color:var(--accent);">Currently: ${(() => { const d = itinerary.dates.find(x => x.id === progress.currentId); return d ? d.flag + ' ' + escapeHtml(d.city) : 'None'; })()}</p>
       </div>
 
       <!-- Itinerary table -->
@@ -183,15 +185,20 @@ export function renderAdmin(itinerary, achievementsData) {
     }
   });
 
-  // Quick set current
-  document.getElementById('quick-set-btn').addEventListener('click', () => {
-    const newId = parseInt(document.getElementById('quick-current-select').value);
+  // Quick set current — saves immediately on dropdown change, no button needed
+  document.getElementById('quick-current-select').addEventListener('change', (e) => {
+    const newId = parseInt(e.target.value);
     const p = Storage.getProgress();
     p.currentId = newId;
     Storage.saveProgress(p);
     const d = itinerary.dates.find(x => x.id === newId);
-    showToast(`Current destination set to ${d ? d.flag + ' ' + d.city : '#' + newId} 📍`);
+    const label = d ? d.flag + ' ' + d.city : '#' + newId;
+    // Update status text without full re-render
+    const statusEl = document.getElementById('quick-set-status');
+    if (statusEl) statusEl.textContent = 'Currently: ' + label;
+    // Update table rows to reflect new current
     renderAdmin(itinerary, achievementsData);
+    showToast(`📍 Current destination set to ${label}`);
   });
 
   // Mark complete
