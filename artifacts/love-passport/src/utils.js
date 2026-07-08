@@ -2,7 +2,7 @@ export function showToast(message, duration = 3000) {
   const toast = document.getElementById('toast');
   if (!toast) return;
   
-  toast.innerHTML = message;
+  toast.textContent = message;
   toast.classList.add('show');
   
   setTimeout(() => {
@@ -28,7 +28,33 @@ export function generateSVG(type, color = '#FF5E8A') {
     bollywood: `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>`,
     food: `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>`
   };
-  return svgs[type] || svgs.heart;
+  // Alias custom itinerary stamp names to the closest available icon
+  // so admin-added / existing destinations render distinct marks instead
+  // of all silently falling back to the heart icon.
+  const aliases = {
+    'coffee-bean': 'coffee-cup',
+    'colosseum': 'compass',
+    'eiffel': 'compass',
+    'torii': 'compass',
+    'gyeongbok': 'compass',
+    'lotus-stamp': 'lotus',
+    'sombrero': 'sunset',
+    'fan': 'flamenco',
+    'parthenon': 'compass',
+    'mountain': 'sunset',
+    'opera-house': 'compass',
+    'taj': 'compass',
+    'bookmark': 'stamp',
+    'wheel': 'compass',
+    'brush': 'bollywood',
+    'hole-in-one': 'compass',
+    'strike': 'stamp',
+    'jellyfish': 'moon',
+    'planet': 'moon',
+    'rocket': 'plane',
+  };
+
+  return svgs[type] || svgs[aliases[type]] || svgs.heart;
 }
 
 export function escapeHtml(unsafe) {

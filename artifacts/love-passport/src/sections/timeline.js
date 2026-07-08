@@ -1,5 +1,5 @@
 import { Storage } from '../storage.js';
-import { generateSVG } from '../utils.js';
+import { generateSVG, escapeHtml } from '../utils.js';
 
 export function renderTimeline(itinerary) {
   const container = document.getElementById('section-timeline');
@@ -14,9 +14,9 @@ export function renderTimeline(itinerary) {
         <div class="timeline-item">
           <div class="timeline-marker">✓</div>
           <div class="timeline-content">
-            <h3 style="color:${date.color}; margin-bottom:5px;">${date.city}</h3>
-            <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">${date.theme}</div>
-            <p style="font-size:0.9rem;">${date.description}</p>
+            <h3 style="color:${date.color}; margin-bottom:5px;">${escapeHtml(date.city)}</h3>
+            <div style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">${escapeHtml(date.theme)}</div>
+            <p style="font-size:0.9rem;">${escapeHtml(date.description)}</p>
           </div>
           <div style="width:45%;"></div> <!-- Empty side for staggered layout -->
         </div>

@@ -1,5 +1,5 @@
 import { Storage } from '../storage.js';
-import { generateSVG } from '../utils.js';
+import { generateSVG, escapeHtml } from '../utils.js';
 
 export function renderBoarding(itinerary) {
   const container = document.getElementById('section-boarding');
@@ -9,7 +9,7 @@ export function renderBoarding(itinerary) {
   const selectorOptions = itinerary.dates.map(d => {
     const isCompleted = progress.completedIds.includes(d.id);
     const isCurrent  = progress.currentId === d.id;
-    const label = `${d.flag} ${d.city}${isCompleted ? ' ✅' : isCurrent ? ' 📍' : ' 🔒'}`;
+    const label = `${escapeHtml(d.flag)} ${escapeHtml(d.city)}${isCompleted ? ' ✅' : isCurrent ? ' 📍' : ' 🔒'}`;
     return `<option value="${d.id}" ${isCurrent ? 'selected' : ''}>${label}</option>`;
   }).join('');
 
@@ -37,8 +37,8 @@ export function renderBoarding(itinerary) {
             </div>
             <div class="plane-icon">✈️</div>
             <div class="route-point">
-              <div class="route-code" style="color: ${date.color || 'var(--secondary)'};">${date.city.substring(0,3).toUpperCase()}</div>
-              <div class="route-city">${date.city}, ${date.country}</div>
+              <div class="route-code" style="color: ${date.color || 'var(--secondary)'};">${escapeHtml(date.city.substring(0,3).toUpperCase())}</div>
+              <div class="route-city">${escapeHtml(date.city)}, ${escapeHtml(date.country)}</div>
             </div>
           </div>
 
@@ -65,13 +65,13 @@ export function renderBoarding(itinerary) {
             </div>
             <div class="detail-box">
               <label>DRESS CODE</label>
-              <div style="font-size: 0.85rem; line-height: 1.3;">${date.dressCode || 'Dress to impress'}</div>
+              <div style="font-size: 0.85rem; line-height: 1.3;">${escapeHtml(date.dressCode || 'Dress to impress')}</div>
             </div>
           </div>
 
           <div style="margin-top: 1.5rem; padding: 15px; background: rgba(255,94,138,0.08); border-radius: 8px; border-left: 4px solid var(--primary);">
-            <strong style="display:block; margin-bottom:5px; font-size:0.75rem; text-transform:uppercase; color:var(--primary); letter-spacing:1px;">✦ ${date.theme}</strong>
-            <span style="font-size:0.9rem; color:#555; line-height:1.5;">${date.description || ''}</span>
+            <strong style="display:block; margin-bottom:5px; font-size:0.75rem; text-transform:uppercase; color:var(--primary); letter-spacing:1px;">✦ ${escapeHtml(date.theme)}</strong>
+            <span style="font-size:0.9rem; color:#555; line-height:1.5;">${escapeHtml(date.description || '')}</span>
           </div>
 
           <button id="tear-btn" class="btn-primary" style="margin-top:1.5rem; width:100%; font-size:0.9rem;">🖨️ PRINT BOARDING PASS</button>
@@ -82,12 +82,12 @@ export function renderBoarding(itinerary) {
             <div style="font-size:0.7rem; font-weight:700; letter-spacing:2px; color:#aaa; border-bottom:1px solid #ddd; padding-bottom:8px; margin-bottom:1rem;">BOARDING PASS</div>
             <div class="detail-box" style="margin-bottom:1.2rem;">
               <label>DESTINATION</label>
-              <div style="font-size:1.3rem; font-weight:700; color:${date.color || 'var(--primary)'};">${date.flag} ${date.city}</div>
+              <div style="font-size:1.3rem; font-weight:700; color:${date.color || 'var(--primary)'};">${escapeHtml(date.flag)} ${escapeHtml(date.city)}</div>
             </div>
             <div class="detail-box" style="margin-bottom:1.2rem;">
               <label>LOVE NOTE</label>
               <div style="font-family:var(--font-romantic); font-size:1.1rem; color:var(--primary); line-height:1.4;">
-                "${date.loveNote || 'Adventure awaits!'}"
+                "${escapeHtml(date.loveNote || 'Adventure awaits!')}"
               </div>
             </div>
             <div class="detail-box">

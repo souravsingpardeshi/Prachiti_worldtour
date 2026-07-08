@@ -1,4 +1,5 @@
 import { Storage } from '../storage.js';
+import { escapeHtml } from '../utils.js';
 
 export function renderMap(itinerary) {
   const container = document.getElementById('section-map');
@@ -50,12 +51,12 @@ export function renderMap(itinerary) {
     markersHtml += `
       <div class="map-marker ${stateClass}"
            style="left:${left}%; top:${top}%;"
-           title="${date.city}"
-           data-city="${date.city}"
-           data-flag="${date.flag}"
+           title="${escapeHtml(date.city)}"
+           data-city="${escapeHtml(date.city)}"
+           data-flag="${escapeHtml(date.flag)}"
            data-id="${date.id}"
            onclick="window.location.hash='#boarding'">
-        <div class="marker-label">${date.flag} ${date.city}</div>
+        <div class="marker-label">${escapeHtml(date.flag)} ${escapeHtml(date.city)}</div>
       </div>
     `;
   });
@@ -128,10 +129,10 @@ export function renderMap(itinerary) {
             return `
               <div onclick="window.location.hash='#boarding'" style="cursor:pointer; background:${bg}; border:1px solid ${border}; border-radius:12px; padding:10px 12px; transition:transform 0.2s; display:flex; align-items:center; gap:8px;"
                    onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
-                <span style="font-size:1.3rem;">${date.flag}</span>
+                <span style="font-size:1.3rem;">${escapeHtml(date.flag)}</span>
                 <div>
-                  <div style="font-size:0.8rem; font-weight:600; color:rgba(255,255,255,0.9);">${date.city}</div>
-                  <div style="font-size:0.65rem; color:rgba(255,255,255,0.4);">${icon} ${date.theme}</div>
+                  <div style="font-size:0.8rem; font-weight:600; color:rgba(255,255,255,0.9);">${escapeHtml(date.city)}</div>
+                  <div style="font-size:0.65rem; color:rgba(255,255,255,0.4);">${icon} ${escapeHtml(date.theme)}</div>
                 </div>
               </div>`;
           }).join('')}

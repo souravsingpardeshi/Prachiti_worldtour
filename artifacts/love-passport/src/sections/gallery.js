@@ -1,5 +1,5 @@
 import { Storage } from '../storage.js';
-import { generateSVG } from '../utils.js';
+import { generateSVG, escapeHtml } from '../utils.js';
 
 export function renderGallery(itinerary) {
   const container = document.getElementById('section-gallery');
@@ -26,8 +26,8 @@ export function renderGallery(itinerary) {
           <div class="polaroid-img">
             ${photoContent}
           </div>
-          <div class="polaroid-caption">${date.city}</div>
-          <div style="font-size:0.8rem; color:#888; text-align:center; margin-top:5px;">${date.theme}</div>
+          <div class="polaroid-caption">${escapeHtml(date.city)}</div>
+          <div style="font-size:0.8rem; color:#888; text-align:center; margin-top:5px;">${escapeHtml(date.theme)}</div>
           <button class="heart-btn ${heartClass}" data-id="${date.id}" style="width:24px; height:24px;">
             ${heartIcon}
           </button>

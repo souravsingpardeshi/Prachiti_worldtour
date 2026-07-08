@@ -1,6 +1,13 @@
 import { Storage } from '../storage.js';
 import { generateSVG, escapeHtml, showToast } from '../utils.js';
 
+const STAMP_TYPES = [
+  'coffee-bean', 'colosseum', 'eiffel', 'torii', 'gyeongbok', 'lotus-stamp',
+  'sombrero', 'fan', 'parthenon', 'mountain', 'opera-house', 'taj',
+  'bookmark', 'wheel', 'brush', 'hole-in-one', 'strike', 'jellyfish',
+  'planet', 'rocket', 'heart'
+];
+
 export function renderAdmin(itinerary, achievementsData) {
   const container = document.getElementById('section-admin');
 
@@ -157,8 +164,48 @@ export function renderAdmin(itinerary, achievementsData) {
         </table>
       </div>
 
+      <!-- Add new destination -->
+      <div class="glass-panel" style="padding:1.5rem; margin-top:1.5rem;">
+        <h3 style="margin-bottom:1rem; font-size:1rem; color:rgba(255,255,255,0.7); font-weight:600; letter-spacing:1px; text-transform:uppercase;">➕ Add New Destination</h3>
+        <form id="add-dest-form" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+          <div>
+            <label style="display:block; font-size:0.75rem; color:#aaa; margin-bottom:4px;">City *</label>
+            <input type="text" id="new-city" required placeholder="e.g. Kyoto" style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:white; font-family:var(--font-ui); font-size:0.9rem; outline:none;">
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; color:#aaa; margin-bottom:4px;">Country *</label>
+            <input type="text" id="new-country" required placeholder="e.g. Japan" style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:white; font-family:var(--font-ui); font-size:0.9rem; outline:none;">
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; color:#aaa; margin-bottom:4px;">Flag Emoji</label>
+            <input type="text" id="new-flag" placeholder="🇯🇵" style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:white; font-family:var(--font-ui); font-size:0.9rem; outline:none;">
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; color:#aaa; margin-bottom:4px;">Theme / Activity *</label>
+            <input type="text" id="new-theme" required placeholder="e.g. Temple Walk" style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:white; font-family:var(--font-ui); font-size:0.9rem; outline:none;">
+          </div>
+          <div style="grid-column:1 / -1;">
+            <label style="display:block; font-size:0.75rem; color:#aaa; margin-bottom:4px;">Description</label>
+            <textarea id="new-desc" rows="2" placeholder="A short romantic description of this date idea..." style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:white; font-family:var(--font-ui); font-size:0.9rem; outline:none; resize:vertical;"></textarea>
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; color:#aaa; margin-bottom:4px;">Stamp Icon</label>
+            <select id="new-stamp" style="width:100%; box-sizing:border-box; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px 12px; color:white; font-family:var(--font-ui); font-size:0.9rem; outline:none;">
+              ${STAMP_TYPES.map(s => `<option value="${s}">${s}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; color:#aaa; margin-bottom:4px;">Accent Color</label>
+            <input type="color" id="new-color" value="#FF5E8A" style="width:100%; height:42px; box-sizing:border-box; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:4px; cursor:pointer;">
+          </div>
+          <div style="grid-column:1 / -1;">
+            <button type="submit" class="btn-primary" style="width:100%; margin-top:0.25rem;">➕ Add Destination</button>
+          </div>
+        </form>
+      </div>
+
       <!-- Danger zone -->
-      <div style="margin-top:2rem; padding:1.5rem; border:1px solid rgba(255,80,80,0.2); border-radius:12px; background:rgba(255,80,80,0.05);">
+      <div style="margin-top:1.5rem; padding:1.5rem; border:1px solid rgba(255,80,80,0.2); border-radius:12px; background:rgba(255,80,80,0.05);">
         <h3 style="color:rgba(255,120,120,0.9); margin-bottom:0.5rem; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px;">⚠ Danger Zone</h3>
         <p style="color:#aaa; font-size:0.8rem; margin-bottom:1rem;">This will erase ALL progress, photos, and stamps.</p>
         <button id="reset-btn" style="background:rgba(255,0,0,0.25); border:1px solid rgba(255,0,0,0.4); color:#ff9090; padding:10px 20px; border-radius:8px; cursor:pointer; font-family:var(--font-ui); font-size:0.9rem; font-weight:600;">💣 Reset Everything</button>
@@ -202,12 +249,43 @@ export function renderAdmin(itinerary, achievementsData) {
     Storage.saveProgress(p);
     const d = itinerary.dates.find(x => x.id === newId);
     const label = d ? d.flag + ' ' + d.city : '#' + newId;
-    // Update status text without full re-render
-    const statusEl = document.getElementById('quick-set-status');
-    if (statusEl) statusEl.textContent = 'Currently: ' + label;
-    // Update table rows to reflect new current
     renderAdmin(itinerary, achievementsData);
     showToast(`📍 Current destination set to ${label}`);
+  });
+
+  // Add new destination
+  document.getElementById('add-dest-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const city = document.getElementById('new-city').value.trim();
+    const country = document.getElementById('new-country').value.trim();
+    const theme = document.getElementById('new-theme').value.trim();
+    const desc = document.getElementById('new-desc').value.trim();
+    const flag = document.getElementById('new-flag').value.trim() || '📍';
+    const stamp = document.getElementById('new-stamp').value;
+    const color = document.getElementById('new-color').value;
+
+    if (!city || !country || !theme) {
+      showToast('Please fill in City, Country and Theme ❌');
+      return;
+    }
+
+    const nextId = itinerary.dates.length ? Math.max(...itinerary.dates.map(d => d.id)) + 1 : 1;
+    const newDate = {
+      id: nextId,
+      city,
+      country,
+      flag,
+      theme,
+      description: desc || `A special date idea in ${city}.`,
+      stamp,
+      color,
+      xp: 100
+    };
+
+    itinerary.dates.push(newDate);
+    Storage.saveItinerary(itinerary);
+    showToast(`✅ Added ${flag} ${city} to the itinerary!`);
+    renderAdmin(itinerary, achievementsData);
   });
 
   // Mark complete

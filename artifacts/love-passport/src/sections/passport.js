@@ -1,5 +1,5 @@
 import { Storage } from '../storage.js';
-import { generateSVG } from '../utils.js';
+import { generateSVG, escapeHtml } from '../utils.js';
 
 export function renderPassport(itinerary) {
   const container = document.getElementById('section-passport');
@@ -13,17 +13,17 @@ export function renderPassport(itinerary) {
       const date = itinerary.dates[i];
       const stampSvg = generateSVG(date.stamp, date.color);
       stampsHtml += `
-        <div class="stamp-slot" title="${date.city}, ${date.country}">
-          <div class="stamp-mark" style="--rot: ${Math.random()*40 - 20}">
-            ${stampSvg}
+        <div class="stamp-slot" title="${escapeHtml(date.city)}, ${escapeHtml(date.country)}">
+          <div class="stamp-circle">
+            <div class="stamp-mark" style="--rot: ${Math.random()*40 - 20}">
+              ${stampSvg}
+            </div>
           </div>
-          <div style="position:absolute; bottom:-15px; font-size:0.6rem; color:#666; font-weight:bold; white-space:nowrap; transform:rotate(${Math.random()*10 - 5}deg)">
-            ${date.city.toUpperCase()}
-          </div>
+          <div class="stamp-label">${escapeHtml(date.city.toUpperCase())}</div>
         </div>
       `;
     } else {
-      stampsHtml += `<div class="stamp-slot"></div>`;
+      stampsHtml += `<div class="stamp-slot"><div class="stamp-circle stamp-circle-empty"></div></div>`;
     }
   }
 
