@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1F2A44">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Love Passport — Around the World with Sourav ❤️</title>
+  <meta name="description" content="A birthday travel adventure for Parchiti">
+  <link rel="manifest" href="/manifest.webmanifest">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Parisienne&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/animations.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- Canvas for confetti/fireworks -->
+  <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;pointer-events:none;z-index:9999;width:100%;height:100%;"></canvas>
+  
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+  
+  <!-- Navigation -->
+  <nav id="main-nav" class="top-nav">
+    <div class="nav-brand">
+      <a href="#landing" class="nav-link">
+        <svg class="nav-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><path d="M3.27 6.96L12 12.01l8.73-5.05"></path><path d="M12 22.08V12"></path></svg>
+        <span>Love Passport</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="#landing" class="nav-link">Home</a>
+      <a href="#passport" class="nav-link">Passport</a>
+      <a href="#boarding" class="nav-link">Boarding</a>
+      <a href="#map" class="nav-link">Map</a>
+      <a href="#gallery" class="nav-link">Gallery</a>
+      <a href="#timeline" class="nav-link">Timeline</a>
+      <a href="#love-letter" class="nav-link">Letters</a>
+      <a href="#achievements" class="nav-link">Achievements</a>
+      <a href="#scratch" class="nav-link">Surprise</a>
+    </div>
+    <div class="nav-actions">
+      <a href="#admin" class="nav-link admin-link" title="Admin">🔒</a>
+    </div>
+  </nav>
+  
+  <!-- Sections -->
+  <main id="app-container">
+    <div id="section-landing" class="section active"></div>
+    <div id="section-passport" class="section"></div>
+    <div id="section-boarding" class="section"></div>
+    <div id="section-map" class="section"></div>
+    <div id="section-gallery" class="section"></div>
+    <div id="section-timeline" class="section"></div>
+    <div id="section-love-letter" class="section"></div>
+    <div id="section-achievements" class="section"></div>
+    <div id="section-scratch" class="section"></div>
+    <div id="section-admin" class="section"></div>
+    <div id="section-final" class="section"></div>
+  </main>
+  
+  <!-- Bottom nav (mobile) -->
+  <nav id="bottom-nav" class="bottom-nav">
+    <a href="#landing" class="nav-link"><span>✈️</span>Home</a>
+    <a href="#passport" class="nav-link"><span>📖</span>Passport</a>
+    <a href="#boarding" class="nav-link"><span>🎫</span>Boarding</a>
+    <a href="#map" class="nav-link"><span>🗺️</span>Map</a>
+    <a href="#gallery" class="nav-link"><span>🖼️</span>Gallery</a>
+    <a href="#timeline" class="nav-link"><span>📅</span>Timeline</a>
+    <a href="#love-letter" class="nav-link"><span>💌</span>Letters</a>
+    <a href="#achievements" class="nav-link"><span>🏆</span>Awards</a>
+    <a href="#scratch" class="nav-link"><span>🎁</span>Surprise</a>
+  </nav>
+  
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

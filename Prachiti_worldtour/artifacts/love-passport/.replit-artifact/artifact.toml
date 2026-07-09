@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Love Passport"
+version = "1.0.0"
+id = "artifacts/love-passport"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22734
+
+[services.development]
+run = "pnpm --filter @workspace/love-passport run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/love-passport", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/love-passport/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22734"
+BASE_PATH = "/"
