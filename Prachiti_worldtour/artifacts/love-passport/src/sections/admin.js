@@ -242,11 +242,11 @@ export function renderAdmin(itinerary, achievementsData) {
   });
 
   // Quick set current — saves immediately on dropdown change, no button needed
-  document.getElementById('quick-current-select').addEventListener('change', (e) => {
+  document.getElementById('quick-current-select').addEventListener('change', async (e) => {
     const newId = parseInt(e.target.value);
     const p = Storage.getProgress();
     p.currentId = newId;
-    Storage.saveProgress(p);
+    await Storage.saveProgress(p);
     const d = itinerary.dates.find(x => x.id === newId);
     const label = d ? d.flag + ' ' + d.city : '#' + newId;
     renderAdmin(itinerary, achievementsData);
@@ -254,7 +254,7 @@ export function renderAdmin(itinerary, achievementsData) {
   });
 
   // Add new destination
-  document.getElementById('add-dest-form').addEventListener('submit', (e) => {
+  document.getElementById('add-dest-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const city = document.getElementById('new-city').value.trim();
     const country = document.getElementById('new-country').value.trim();
@@ -283,14 +283,21 @@ export function renderAdmin(itinerary, achievementsData) {
     };
 
     itinerary.dates.push(newDate);
-    Storage.saveItinerary(itinerary);
+
+    // Disable submit button and show saving state
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳ Saving...'; }
+
+    // Await the save so we know it reached the DB
+    await Storage.saveItinerary(itinerary);
+
     showToast(`✅ Added ${flag} ${city} to the itinerary!`);
     renderAdmin(itinerary, achievementsData);
   });
 
   // Mark complete
   container.querySelectorAll('.complete').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const id = parseInt(btn.getAttribute('data-id'));
       const dateInfo = itinerary.dates.find(d => d.id === id);
       const p = Storage.getProgress();
@@ -302,7 +309,7 @@ export function renderAdmin(itinerary, achievementsData) {
           const next = itinerary.dates.find(d => d.id > id && !p.completedIds.includes(d.id));
           if (next) p.currentId = next.id;
         }
-        Storage.saveProgress(p);
+        await Storage.saveProgress(p);
         showToast(`✅ Stamped: ${dateInfo ? dateInfo.city : '#' + id}!`);
         import('../animations.js').then(({ launchConfetti }) => launchConfetti());
         renderAdmin(itinerary, achievementsData);
@@ -312,13 +319,13 @@ export function renderAdmin(itinerary, achievementsData) {
 
   // Undo completion
   container.querySelectorAll('.uncomplete').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const id = parseInt(btn.getAttribute('data-id'));
       const dateInfo = itinerary.dates.find(d => d.id === id);
       const p = Storage.getProgress();
       p.completedIds = p.completedIds.filter(x => x !== id);
       p.xp = Math.max(0, p.xp - ((dateInfo && dateInfo.xp) ? dateInfo.xp : 100));
-      Storage.saveProgress(p);
+      await Storage.saveProgress(p);
       showToast(`↩ Undid completion for ${dateInfo ? dateInfo.city : '#' + id}`);
       renderAdmin(itinerary, achievementsData);
     });
@@ -326,11 +333,11 @@ export function renderAdmin(itinerary, achievementsData) {
 
   // Set current from table row
   container.querySelectorAll('.set-current').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const id = parseInt(btn.getAttribute('data-id'));
       const p = Storage.getProgress();
       p.currentId = id;
-      Storage.saveProgress(p);
+      await Storage.saveProgress(p);
       const d = itinerary.dates.find(x => x.id === id);
       showToast(`📍 Current set to ${d ? d.flag + ' ' + d.city : '#' + id}`);
       renderAdmin(itinerary, achievementsData);
