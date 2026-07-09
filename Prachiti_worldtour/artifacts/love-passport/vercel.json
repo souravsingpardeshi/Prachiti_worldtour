@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "https://romantic-journey-api.onrender.com/api/:match*"
+      "destination": "https://prachiti-worldtour.onrender.com/api/:match*"
     },
     {
       "source": "/(.*)",
