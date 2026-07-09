@@ -18,6 +18,19 @@ let itineraryData = null;
 let achievementsData = null;
 
 async function init() {
+  // Ask the browser to treat our storage as persistent instead of
+  // "best-effort" — on Android Chrome, sites that aren't installed/bookmarked
+  // can have their localStorage silently evicted under storage pressure,
+  // which is the most common cause of progress "disappearing after refresh".
+  if (navigator.storage && navigator.storage.persist) {
+    try {
+      const granted = await navigator.storage.persist();
+      console.log('[Storage] persistent storage granted:', granted);
+    } catch (err) {
+      console.warn('[Storage] persist() request failed', err);
+    }
+  }
+
   // Load data
   try {
     const customItinerary = Storage.getItinerary();
