@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/:match*",
-      "destination": "https://prachiti-worldtour.onrender.com/api/:match*"
+      "source": "/api/:path*",
+      "destination": "https://prachiti-worldtour.onrender.com/api/:path*"
     },
     {
       "source": "/(.*)",
