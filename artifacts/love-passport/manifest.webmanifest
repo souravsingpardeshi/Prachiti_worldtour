@@ -1,9 +1,0 @@
-{
-  "name": "Love Passport",
-  "short_name": "Love Passport",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#1F2A44",
-  "theme_color": "#1F2A44",
-  "orientation": "portrait"
-}
