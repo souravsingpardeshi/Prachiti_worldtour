@@ -343,11 +343,15 @@ export function renderAdmin(itinerary, achievementsData) {
   });
 
   container.querySelectorAll('.edit').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const id = btn.getAttribute('data-id');
       document.getElementById('photo-dest-id').value = id;
-      const existing = Storage.getPhoto(id);
       const preview  = document.getElementById('photo-preview');
+      preview.style.backgroundImage = 'none';
+      preview.textContent = 'Loading...';
+      document.getElementById('photo-upload').value = '';
+      document.getElementById('photo-modal').classList.add('active');
+      const existing = await Storage.getPhoto(id);
       if (existing) {
         preview.style.backgroundImage = `url(${existing})`;
         preview.textContent = '';
@@ -355,8 +359,6 @@ export function renderAdmin(itinerary, achievementsData) {
         preview.style.backgroundImage = 'none';
         preview.textContent = 'No image selected';
       }
-      document.getElementById('photo-upload').value = '';
-      document.getElementById('photo-modal').classList.add('active');
     });
   });
 
@@ -378,9 +380,9 @@ export function renderAdmin(itinerary, achievementsData) {
     const file = document.getElementById('photo-upload').files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (ev) => {
-        Storage.savePhoto(id, ev.target.result);
-        showToast('📸 Photo saved!');
+      reader.onload = async (ev) => {
+        const ok = await Storage.savePhoto(id, ev.target.result);
+        showToast(ok ? '📸 Photo saved!' : '❌ Could not save photo — storage may be full');
         document.getElementById('photo-modal').classList.remove('active');
       };
       reader.readAsDataURL(file);
