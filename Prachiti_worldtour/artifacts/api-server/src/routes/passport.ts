@@ -43,6 +43,7 @@ router.post('/update', async (req: Request, res: Response) => {
     }
 
     (passport as any)[key] = value;
+    passport.markModified(key);
     await passport.save();
 
     res.json({ success: true });
