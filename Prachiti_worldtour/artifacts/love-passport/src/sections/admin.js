@@ -102,6 +102,7 @@ export function renderAdmin(itinerary, achievementsData) {
             ${completeBtnHtml}
             ${setCurrentHtml}
             <button class="action-btn edit" data-id="${date.id}" title="Upload memory photo" style="background:rgba(255,94,138,0.15); border:1px solid rgba(255,94,138,0.3);">📸 Photo</button>
+            <button class="action-btn delete" data-id="${date.id}" title="Delete destination" style="background:rgba(255,100,100,0.15); border:1px solid rgba(255,100,100,0.3); padding: 5px 8px;">🗑️</button>
           </div>
         </td>
       </tr>
@@ -346,6 +347,20 @@ export function renderAdmin(itinerary, achievementsData) {
       const d = itinerary.dates.find(x => x.id === id);
       showToast(`📍 Current set to ${d ? d.flag + ' ' + d.city : '#' + id}`);
       renderAdmin(itinerary, achievementsData);
+    });
+  });
+
+  // Delete destination
+  container.querySelectorAll('.delete').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = parseInt(btn.getAttribute('data-id'));
+      const dateInfo = itinerary.dates.find(d => d.id === id);
+      if (confirm(`Are you sure you want to delete "${dateInfo ? dateInfo.city : '#' + id}"?`)) {
+        itinerary.dates = itinerary.dates.filter(d => d.id !== id);
+        await Storage.saveItinerary(itinerary);
+        showToast(`🗑️ Deleted ${dateInfo ? dateInfo.city : '#' + id}`);
+        renderAdmin(itinerary, achievementsData);
+      }
     });
   });
 

@@ -79,24 +79,15 @@ async function init() {
 
   // Load itinerary data
   try {
-    const res1 = await fetch('/data/itinerary.json');
-    const defaultItinerary = await res1.json();
-
     const customItinerary = Storage.getItinerary();
-    if (customItinerary && customItinerary.dates && customItinerary.dates.length > 0) {
-      const dbDateIds = new Set(customItinerary.dates.map(d => d.id));
-      const mergedDates = [...customItinerary.dates];
-      
-      for (const defaultDate of defaultItinerary.dates) {
-        if (!dbDateIds.has(defaultDate.id)) {
-          mergedDates.push(defaultDate);
-        }
-      }
-      
-      mergedDates.sort((a, b) => a.id - b.id);
-      itineraryData = { ...customItinerary, dates: mergedDates };
+    if (customItinerary && customItinerary.dates) {
+      // If it exists in the DB (even if empty), use it directly so deletes persist!
+      itineraryData = customItinerary;
     } else {
-      itineraryData = defaultItinerary;
+      // First-time load: load from public/data/itinerary.json and initialize the DB
+      const res1 = await fetch('/data/itinerary.json');
+      itineraryData = await res1.json();
+      await Storage.saveItinerary(itineraryData);
     }
     
     const res2 = await fetch('/data/achievements.json');

@@ -110,26 +110,74 @@
 
 /* Home screen — mobile polish */
 @media (max-width: 480px) {
-  #section-landing.active { align-items: stretch; justify-content: flex-start; }
+  #section-landing.active { 
+    align-items: center; 
+    justify-content: center; 
+    padding: 80px 1rem;
+  }
   .landing-card {
     width: 100%;
-    max-width: none;
-    padding: 2.25rem 1.25rem 1.75rem;
-    border-radius: 20px;
-    margin: 0.5rem auto 1rem;
+    max-width: 420px;
+    padding: 2.5rem 1.5rem;
+    border-radius: 28px;
+    margin: 0 auto;
+    background: rgba(31, 42, 68, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
   }
-  .passport-icon { width: 64px; height: 64px; margin-bottom: 0.75rem; }
-  .landing-title { font-size: 1.9rem; letter-spacing: 1px; margin-bottom: 0.35rem; }
-  .landing-subtitle { font-size: 1.4rem; margin-bottom: 1.25rem; }
-  .landing-card p { font-size: 0.9rem; margin-bottom: 1.5rem !important; }
-  .countdown-container { gap: 0.5rem; margin-bottom: 1.5rem; }
-  .count-box { min-width: 0; flex: 1; padding: 8px 4px; }
-  .count-num { font-size: 1.4rem; }
-  .count-label { font-size: 0.6rem; }
-  .quote-container { min-height: 60px; margin-bottom: 1.5rem; padding: 0 0.5rem; }
-  .quote-text { font-size: 0.9rem; }
-  .departure-board { margin-top: 1.5rem; font-size: 1rem; padding: 8px 14px; letter-spacing: 1px; }
-  .plane-animation { width: 70px; height: 70px; }
+  .passport-icon { 
+    width: 64px; 
+    height: 64px; 
+    margin-bottom: 1rem; 
+    animation: pulse 2s infinite alternate;
+  }
+  .landing-title { 
+    font-size: 2.2rem; 
+    letter-spacing: 1.5px; 
+    margin-bottom: 0.35rem; 
+  }
+  .landing-subtitle { 
+    font-size: 1.5rem; 
+    margin-bottom: 1.25rem; 
+  }
+  .landing-card p { 
+    font-size: 0.9rem; 
+    margin-bottom: 1.5rem !important; 
+  }
+  .countdown-container { 
+    gap: 0.75rem; 
+    margin-bottom: 1.5rem; 
+  }
+  .count-box { 
+    min-width: 65px; 
+    padding: 10px 6px; 
+    background: rgba(10, 15, 30, 0.55);
+    border-radius: 12px;
+  }
+  .count-num { 
+    font-size: 1.5rem; 
+  }
+  .count-label { 
+    font-size: 0.6rem; 
+  }
+  .quote-container { 
+    min-height: 70px; 
+    margin-bottom: 1.5rem; 
+    padding: 0 0.5rem; 
+  }
+  .quote-text { 
+    font-size: 0.95rem; 
+  }
+  .departure-board { 
+    margin-top: 1.5rem; 
+    font-size: 1rem; 
+    padding: 10px 16px; 
+    letter-spacing: 1px; 
+  }
+  .plane-animation { 
+    width: 70px; 
+    height: 70px; 
+  }
 }
 
 /* Passport Section */
