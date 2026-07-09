@@ -79,13 +79,24 @@ async function init() {
 
   // Load itinerary data
   try {
+    const res1 = await fetch('/data/itinerary.json');
+    const defaultItinerary = await res1.json();
+
     const customItinerary = Storage.getItinerary();
     if (customItinerary && customItinerary.dates && customItinerary.dates.length > 0) {
-      itineraryData = customItinerary;
+      const dbDateIds = new Set(customItinerary.dates.map(d => d.id));
+      const mergedDates = [...customItinerary.dates];
+      
+      for (const defaultDate of defaultItinerary.dates) {
+        if (!dbDateIds.has(defaultDate.id)) {
+          mergedDates.push(defaultDate);
+        }
+      }
+      
+      mergedDates.sort((a, b) => a.id - b.id);
+      itineraryData = { ...customItinerary, dates: mergedDates };
     } else {
-      // Fall back to the static bundled itinerary
-      const res1 = await fetch('/data/itinerary.json');
-      itineraryData = await res1.json();
+      itineraryData = defaultItinerary;
     }
     
     const res2 = await fetch('/data/achievements.json');

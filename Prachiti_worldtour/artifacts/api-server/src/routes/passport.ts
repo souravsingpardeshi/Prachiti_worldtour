@@ -92,4 +92,16 @@ router.post('/photo', async (req: Request, res: Response) => {
   }
 });
 
+// Reset all progress, photos, and itinerary
+router.post('/reset', async (req: Request, res: Response) => {
+  try {
+    await Passport.deleteOne({ passportId: PASSPORT_ID });
+    await Photo.deleteMany({ passportId: PASSPORT_ID });
+    res.json({ success: true });
+  } catch (error) {
+    req.log.error(error);
+    res.status(500).json({ error: 'Failed to reset passport data' });
+  }
+});
+
 export default router;

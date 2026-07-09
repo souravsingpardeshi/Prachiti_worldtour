@@ -233,8 +233,13 @@ export function renderAdmin(itinerary, achievementsData) {
     renderAdmin(itinerary, achievementsData);
   });
 
-  document.getElementById('reset-btn').addEventListener('click', () => {
+  document.getElementById('reset-btn').addEventListener('click', async () => {
     if (confirm('Are you absolutely sure? All progress, photos, and stamps will be permanently erased.')) {
+      try {
+        await fetch('/api/passport/reset', { method: 'POST' });
+      } catch (err) {
+        console.error('Failed to reset DB data:', err);
+      }
       localStorage.clear();
       sessionStorage.clear();
       location.reload();
