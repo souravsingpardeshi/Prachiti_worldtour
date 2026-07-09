@@ -108,6 +108,30 @@
   box-shadow: inset 0 0 10px #000;
 }
 
+/* Home screen — mobile polish */
+@media (max-width: 480px) {
+  #section-landing.active { align-items: stretch; justify-content: flex-start; }
+  .landing-card {
+    width: 100%;
+    max-width: none;
+    padding: 2.25rem 1.25rem 1.75rem;
+    border-radius: 20px;
+    margin: 0.5rem auto 1rem;
+  }
+  .passport-icon { width: 64px; height: 64px; margin-bottom: 0.75rem; }
+  .landing-title { font-size: 1.9rem; letter-spacing: 1px; margin-bottom: 0.35rem; }
+  .landing-subtitle { font-size: 1.4rem; margin-bottom: 1.25rem; }
+  .landing-card p { font-size: 0.9rem; margin-bottom: 1.5rem !important; }
+  .countdown-container { gap: 0.5rem; margin-bottom: 1.5rem; }
+  .count-box { min-width: 0; flex: 1; padding: 8px 4px; }
+  .count-num { font-size: 1.4rem; }
+  .count-label { font-size: 0.6rem; }
+  .quote-container { min-height: 60px; margin-bottom: 1.5rem; padding: 0 0.5rem; }
+  .quote-text { font-size: 0.9rem; }
+  .departure-board { margin-top: 1.5rem; font-size: 1rem; padding: 8px 14px; letter-spacing: 1px; }
+  .plane-animation { width: 70px; height: 70px; }
+}
+
 /* Passport Section */
 .passport-container {
   display: flex;
@@ -156,8 +180,12 @@
   transform: translateX(50%) rotateY(-20deg);
 }
 @media (max-width: 768px) {
+  /* On phones, translating/rotating the whole book pushed the opened
+     pages off the top of the viewport (behind the header) or under the
+     bottom nav, making the passport content effectively invisible.
+     Keep it centered in place and rely on scroll for the content. */
   .passport-book.open {
-    transform: translateY(20%) rotateX(20deg);
+    transform: none;
   }
 }
 
