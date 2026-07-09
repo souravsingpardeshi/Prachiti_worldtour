@@ -160,33 +160,65 @@ button, a, .clickable {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70px;
-  background: rgba(31, 42, 68, 0.9);
+  height: 68px;
+  background: rgba(31, 42, 68, 0.94);
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
   z-index: 1000;
   border-top: 1px solid var(--glass-border);
-  padding: 0 1rem;
+  padding: 0 0.4rem;
   padding-bottom: env(safe-area-inset-bottom, 0);
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
 }
+
+.bottom-nav::-webkit-scrollbar { display: none; }
 
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .bottom-nav {
     display: flex;
-    justify-content: space-around;
     align-items: center;
   }
   .bottom-nav .nav-link {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    font-size: 0.7rem;
+    justify-content: center;
+    gap: 3px;
+    font-size: 0.62rem;
+    flex-shrink: 0;
+    min-width: 60px;
+    height: 56px;
+    padding: 4px 6px;
+    border-radius: 12px;
+    scroll-snap-align: start;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    white-space: nowrap;
+  }
+  .bottom-nav .nav-link:active {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .bottom-nav .nav-link.active {
+    color: var(--primary);
   }
   .bottom-nav .nav-link span {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    line-height: 1;
   }
-  .section { padding-bottom: 80px; }
+  .section { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)); }
+
+  /* Android-friendly base tweaks */
+  button, a.nav-link, select, input, textarea {
+    touch-action: manipulation;
+  }
+  input, select, textarea {
+    font-size: 16px; /* prevents Android/iOS auto-zoom on focus */
+  }
 }
 
 /* Toast */
