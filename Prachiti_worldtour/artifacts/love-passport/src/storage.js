@@ -46,19 +46,52 @@ async function idbSet(key, val) {
   });
 }
 
+// Fetch with timeout
+function fetchWithTimeout(url, options, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error('Request timed out')), timeoutMs);
+    fetch(url, options)
+      .then(res => { clearTimeout(timer); resolve(res); })
+      .catch(err => { clearTimeout(timer); reject(err); });
+  });
+}
+
 export const Storage = {
-  initFromApi: async () => {
-    try {
-      const res = await fetch('/api/passport');
-      if (res.ok) {
-        const data = await res.json();
-        memoryFallback.progress = data.progress;
-        memoryFallback.itinerary = data.itinerary;
-        memoryFallback.scratched = data.scratched;
+  /**
+   * Load all data from API.
+   * Retries up to 3 times with increasing timeout to handle Render cold starts.
+   * Returns true if succeeded, false if all retries failed.
+   */
+  initFromApi: async (onRetry) => {
+    const attempts = [
+      { timeout: 15000, label: 'Connecting...' },
+      { timeout: 25000, label: 'Waking up server (this can take ~30s on first open)...' },
+      { timeout: 35000, label: 'Almost there...' },
+    ];
+
+    for (let i = 0; i < attempts.length; i++) {
+      try {
+        if (i > 0 && onRetry) onRetry(attempts[i].label);
+        const res = await fetchWithTimeout('/api/passport', {}, attempts[i].timeout);
+        if (res.ok) {
+          const data = await res.json();
+          memoryFallback.progress = data.progress ?? null;
+          memoryFallback.itinerary = data.itinerary ?? null;
+          memoryFallback.scratched = data.scratched ?? null;
+          console.log('[Storage] loaded from API', data);
+          return true;
+        }
+      } catch (err) {
+        console.warn(`[Storage] attempt ${i + 1} failed:`, err.message);
+        if (i === attempts.length - 1) {
+          console.error('[Storage] all retries failed, using static fallback');
+          return false;
+        }
+        // Short pause before retry
+        await new Promise(r => setTimeout(r, 1000));
       }
-    } catch (err) {
-      console.error('[Storage] failed to load from API', err);
     }
+    return false;
   },
 
   get: (key) => {
@@ -74,7 +107,7 @@ export const Storage = {
     return memoryFallback[key];
   },
   
-  set: (key, val) => {
+  set: async (key, val) => {
     memoryFallback[key] = val;
     
     // Save to local storage for offline fallback
@@ -84,15 +117,19 @@ export const Storage = {
       console.warn('[Storage] local write failed', err);
     }
 
-    // Save to API asynchronously
-    fetch('/api/passport/update', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ key, value: val })
-    }).catch(err => {
+    // Save to API
+    try {
+      const res = await fetchWithTimeout('/api/passport/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, value: val })
+      }, 15000);
+      if (!res.ok) throw new Error('Server returned ' + res.status);
+      console.log('[Storage] saved to API:', key);
+    } catch (err) {
       console.error('[Storage] API write failed', err);
       Storage._notifyPersistFailure();
-    });
+    }
 
     return true;
   },
@@ -103,9 +140,9 @@ export const Storage = {
     Storage._warnedPersistFailure = true;
     const toast = document.getElementById('toast');
     if (toast) {
-      toast.textContent = "⚠️ Could not save progress to the server.";
+      toast.textContent = "⚠️ Could not save to server. Try again in a moment.";
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 6000);
+      setTimeout(() => toast.classList.remove('show'), 8000);
     }
   },
   
@@ -121,11 +158,10 @@ export const Storage = {
   getPhoto: async (id) => {
     // Try to get from API first
     try {
-      const res = await fetch(`/api/passport/photo/${id}`);
+      const res = await fetchWithTimeout(`/api/passport/photo/${id}`, {}, 10000);
       if (res.ok) {
         const data = await res.json();
         if (data.base64) {
-          // Cache in IndexedDB
           idbSet('photo_' + id, data.base64).catch(() => {});
           return data.base64;
         }
@@ -164,11 +200,11 @@ export const Storage = {
 
     // Save to API
     try {
-      const res = await fetch('/api/passport/photo', {
+      const res = await fetchWithTimeout('/api/passport/photo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, base64 })
-      });
+      }, 15000);
       if (!res.ok) throw new Error('API save failed');
       return true;
     } catch (err) {
