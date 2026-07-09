@@ -17,14 +17,17 @@ export function renderLanding(itinerary) {
   container.innerHTML = `
     <div class="stars-layer" id="landing-stars"></div>
     <div class="clouds-layer">
-      <!-- Clouds will be injected here -->
-      <svg class="cloud" style="top: 10%; width: 150px; animation-duration: 40s;" viewBox="0 0 24 24" fill="white"><path d="M17.5 19c-2.5 0-4.5-2-4.5-4.5 0-.2.02-.5.06-.7C12.4 13.3 11.5 13 10.5 13c-2.5 0-4.5 2-4.5 4.5S8 22 10.5 22h7c1.9 0 3.5-1.6 3.5-3.5S19.4 15 17.5 15c-.2 0-.4 0-.6.1.3-.6.6-1.3.6-2.1 0-2.8-2.2-5-5-5-2.2 0-4.1 1.4-4.8 3.3.5.4 1 .9 1.4 1.5.3-.8 1-1.3 1.9-1.3 1.1 0 2 .9 2 2 0 1.1-.9 2-2 2h-.4c.7.4 1.2 1 1.4 1.7.3-.2.6-.2 1-.2 1.4 0 2.5 1.1 2.5 2.5z"/></svg>
-      <svg class="cloud" style="top: 40%; width: 250px; animation-duration: 60s; opacity: 0.3;" viewBox="0 0 24 24" fill="white"><path d="M17.5 19c-2.5 0-4.5-2-4.5-4.5 0-.2.02-.5.06-.7C12.4 13.3 11.5 13 10.5 13c-2.5 0-4.5 2-4.5 4.5S8 22 10.5 22h7c1.9 0 3.5-1.6 3.5-3.5S19.4 15 17.5 15c-.2 0-.4 0-.6.1.3-.6.6-1.3.6-2.1 0-2.8-2.2-5-5-5-2.2 0-4.1 1.4-4.8 3.3.5.4 1 .9 1.4 1.5.3-.8 1-1.3 1.9-1.3 1.1 0 2 .9 2 2 0 1.1-.9 2-2 2h-.4c.7.4 1.2 1 1.4 1.7.3-.2.6-.2 1-.2 1.4 0 2.5 1.1 2.5 2.5z"/></svg>
-      <svg class="cloud" style="top: 70%; width: 100px; animation-duration: 35s;" viewBox="0 0 24 24" fill="white"><path d="M17.5 19c-2.5 0-4.5-2-4.5-4.5 0-.2.02-.5.06-.7C12.4 13.3 11.5 13 10.5 13c-2.5 0-4.5 2-4.5 4.5S8 22 10.5 22h7c1.9 0 3.5-1.6 3.5-3.5S19.4 15 17.5 15c-.2 0-.4 0-.6.1.3-.6.6-1.3.6-2.1 0-2.8-2.2-5-5-5-2.2 0-4.1 1.4-4.8 3.3.5.4 1 .9 1.4 1.5.3-.8 1-1.3 1.9-1.3 1.1 0 2 .9 2 2 0 1.1-.9 2-2 2h-.4c.7.4 1.2 1 1.4 1.7.3-.2.6-.2 1-.2 1.4 0 2.5 1.1 2.5 2.5z"/></svg>
+      <!-- Dreamy, fluffy radial-gradient clouds -->
+      <div class="cloud-fluffy" style="position: absolute; top: 10%; width: 220px; height: 100px; left: -250px; animation: cloud-drift-fluffy 55s linear infinite; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%); filter: blur(12px);"></div>
+      <div class="cloud-fluffy" style="position: absolute; top: 45%; width: 350px; height: 160px; left: -380px; animation: cloud-drift-fluffy 75s linear infinite 10s; background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 70%); filter: blur(20px); opacity: 0.8;"></div>
+      <div class="cloud-fluffy" style="position: absolute; top: 75%; width: 260px; height: 120px; left: -290px; animation: cloud-drift-fluffy 65s linear infinite 25s; background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0) 70%); filter: blur(15px);"></div>
     </div>
     
     <div class="plane-animation">
-      ${generateSVG('plane', 'white')}
+      <!-- Elegant paper plane SVG -->
+      <svg viewBox="0 0 24 24" fill="currentColor" style="width: 100%; height: 100%; color: rgba(255,255,255,0.85); filter: drop-shadow(0 4px 12px rgba(255,94,138,0.4));">
+        <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+      </svg>
     </div>
     
     <div class="landing-card glass-panel">

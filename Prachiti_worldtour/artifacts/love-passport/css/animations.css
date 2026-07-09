@@ -11,12 +11,36 @@
   0% { transform: translateX(-200px); }
   100% { transform: translateX(calc(100vw + 200px)); }
 }
+@keyframes cloud-drift-fluffy {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(100vw + 400px)); }
+}
 
 /* Plane flight curved path */
 @keyframes plane-fly {
-  0% { transform: translateX(-100px) translateY(0) rotate(-5deg); }
-  50% { transform: translateX(50vw) translateY(-40px) rotate(0deg); }
-  100% { transform: translateX(calc(100vw + 100px)) translateY(0) rotate(5deg); }
+  0% {
+    transform: translate(-100px, 30vh) rotate(15deg) scale(0.6);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  30% {
+    transform: translate(30vw, 15vh) rotate(-12deg) scale(0.9);
+  }
+  50% {
+    transform: translate(50vw, 35vh) rotate(18deg) scale(1.1);
+  }
+  75% {
+    transform: translate(75vw, 10vh) rotate(-10deg) scale(0.85);
+  }
+  95% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(100vw + 100px), 25vh) rotate(15deg) scale(0.6);
+    opacity: 0;
+  }
 }
 
 /* Sparkle burst */
